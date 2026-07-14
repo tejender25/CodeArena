@@ -55,24 +55,42 @@ const createJob = async (req, res) => {
 };
 
 const getAllJobs = async (req, res) => {
-    try {
+  try {
+    const keyword = req.query.keyword || "";
+    const page = Number(req.query.page) || 1;
+    const limit = 6;
+    const skip = (page - 1) * limit;
 
-        const jobs = await Job.find()
-            .populate("recruiter", "fullName email");
+    const jobs = await Job.find({
+      title: {
+        $regex: keyword,
+        $options: "i",
+      },
+    })
+      .populate("recruiter", "fullName email")
+      .skip(skip)
+      .limit(limit);
 
-        res.status(200).json({
-            success: true,
-            jobs
-        });
+    const totalJobs = await Job.countDocuments({
+      title: {
+        $regex: keyword,
+        $options: "i",
+      },
+    });
 
-    } catch (error) {
-
-        res.status(500).json({
-            success:false,
-            message:error.message
-        });
-
-    }
+    res.status(200).json({
+      success: true,
+      currentPage: page,
+      totalPages: Math.ceil(totalJobs / limit),
+      totalJobs,
+      jobs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 const getJobById = async (req, res) => {
