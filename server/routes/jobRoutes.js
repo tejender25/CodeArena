@@ -7,9 +7,6 @@ const {
     isRecruiter
 } = require("../middleware/authMiddleware");
 
-const {
-    createJob
-} = require("../controllers/jobController");
 
 router.post(
     "/create",
