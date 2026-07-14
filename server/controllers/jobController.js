@@ -150,6 +150,51 @@ const updateJob = async (req, res) => {
     }
 };
 
+const deleteJob = async (req,res)=>{
+
+    try{
+
+        const job = await Job.findById(req.params.id);
+
+        if(!job){
+
+            return res.status(404).json({
+                success:false,
+                message:"Job not found"
+            });
+
+        }
+
+        if(job.recruiter.toString()!=req.user.id){
+
+            return res.status(403).json({
+                success:false,
+                message:"Unauthorized"
+            });
+
+        }
+
+        await job.deleteOne();
+
+        res.json({
+
+            success:true,
+
+            message:"Job Deleted"
+
+        });
+
+    }
+    catch(error){
+
+        res.status(500).json({
+            success:false,
+            message:error.message
+        });
+
+    }
+
+};
 module.exports = {
-  createJob,getAllJobs,getJobById,updateJob
+  createJob,getAllJobs,getJobById,updateJob,deleteJob
 };

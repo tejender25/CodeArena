@@ -1,5 +1,5 @@
 const express = require("express");
-const {createJob, getAllJobs,getJobById,updateJob} = require("../controllers/jobController");
+const {createJob, getAllJobs,getJobById,updateJob,deleteJob} = require("../controllers/jobController");
 const router = express.Router();
 
 const {
@@ -22,6 +22,12 @@ router.put(
     updateJob
 );
 
+router.delete(
+    "/:id",
+    auth,
+    isRecruiter,
+    deleteJob
+);
 router.get("/", getAllJobs);
 router.get("/:id", getJobById);
 
