@@ -107,6 +107,49 @@ const getJobById = async (req, res) => {
 
 };
 
+const updateJob = async (req, res) => {
+    try {
+
+        const job = await Job.findById(req.params.id);
+
+        if (!job) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        if (job.recruiter.toString() !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized"
+            });
+        }
+
+        const updatedJob = await Job.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        res.json({
+            success: true,
+            updatedJob
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+};
+
 module.exports = {
-  createJob,getAllJobs,getJobById
+  createJob,getAllJobs,getJobById,updateJob
 };
