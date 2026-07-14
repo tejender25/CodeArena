@@ -110,6 +110,51 @@ const getApplicantsForJob = async (req, res) => {
     });
   }
 };
+const updateApplicationStatus = async (req, res) => {
+  try {
+    const { applicationId } = req.params;
+    const { status } = req.body;
+
+    if (!["Pending", "Accepted", "Rejected"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
+    }
+
+    const application = await Application.findById(applicationId).populate("job");
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    // Only recruiter who owns the job can update it
+    if (application.job.recruiter.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: "Access Denied",
+      });
+    }
+
+    application.status = status;
+
+    await application.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Application status updated successfully",
+      application,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
-  applyJob,getMyApplications,getApplicantsForJob
+  applyJob,getMyApplications,getApplicantsForJob,updateApplicationStatus
 };
