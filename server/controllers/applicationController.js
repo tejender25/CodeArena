@@ -1,5 +1,7 @@
 const Application = require("../models/Application");
 const Job = require("../models/Job");
+const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier");
 const applyJob = async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -27,10 +29,45 @@ const applyJob = async (req, res) => {
       });
     }
 
-    const application = await Application.create({
-      job: jobId,
-      applicant,
+    let resumeUrl = "";
+
+if (req.file) {
+
+    const uploadResult = await new Promise((resolve, reject) => {
+
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {
+                folder: "resumes",
+                resource_type: "auto",
+            },
+            (error, result) => {
+
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+
+            }
+        );
+
+        streamifier
+            .createReadStream(req.file.buffer)
+            .pipe(uploadStream);
+
     });
+
+    resumeUrl = uploadResult.secure_url;
+
+}
+
+const application = await Application.create({
+
+    job: jobId,
+    applicant,
+    resume: resumeUrl
+
+});
 
     res.status(201).json({
       success: true,

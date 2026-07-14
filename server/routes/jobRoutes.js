@@ -1,5 +1,5 @@
 const express = require("express");
-const {createJob, getAllJobs,getJobById,updateJob,deleteJob} = require("../controllers/jobController");
+const {createJob, getAllJobs,getJobById,updateJob,deleteJob,getMyJobs} = require("../controllers/jobController");
 const router = express.Router();
 
 const {
@@ -13,6 +13,12 @@ router.post(
     auth,
     isRecruiter,
     createJob
+);
+router.get(
+    "/my-jobs",
+    auth,
+    isRecruiter,
+    getMyJobs
 );
 
 router.put(

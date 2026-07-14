@@ -213,6 +213,23 @@ const deleteJob = async (req,res)=>{
     }
 
 };
+const getMyJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find({
+      recruiter: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      jobs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
-  createJob,getAllJobs,getJobById,updateJob,deleteJob
+  createJob,getAllJobs,getJobById,updateJob,deleteJob,getMyJobs
 };
