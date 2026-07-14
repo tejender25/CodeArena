@@ -31,4 +31,19 @@ const auth = (req, res, next) => {
     }
 };
 
-module.exports = auth;
+const isRecruiter = (req, res, next) => {
+
+    if (req.user.role !== "recruiter") {
+        return res.status(403).json({
+            success: false,
+            message: "Access Denied. Recruiters only."
+        });
+    }
+
+    next();
+};
+
+module.exports = {
+    auth,
+    isRecruiter
+};
