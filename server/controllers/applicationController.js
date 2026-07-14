@@ -70,6 +70,46 @@ const getMyApplications = async (req, res) => {
     });
   }
 };
+const getApplicantsForJob = async (req, res) => {
+  try {
+    const { jobId } = req.params;
+
+    // Check if job exists
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    // Only recruiter who created the job can view applicants
+    if (job.recruiter.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: "Access Denied",
+      });
+    }
+
+    const applications = await Application.find({
+      job: jobId,
+    })
+      .populate("applicant", "fullName email role")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: applications.length,
+      applications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
-  applyJob,getMyApplications
+  applyJob,getMyApplications,getApplicantsForJob
 };
