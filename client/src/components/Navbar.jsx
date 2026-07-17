@@ -7,50 +7,104 @@ export default function Navbar() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
     navigate("/login");
   };
 
   return (
-    <div
+    <nav
       style={{
-        padding: "20px",
-        borderBottom: "1px solid gray",
+        background: "#1e3a8a",
+        color: "white",
+        padding: "15px 40px",
         display: "flex",
-        gap: "20px",
+        justifyContent: "space-between",
+        alignItems: "center",
+        boxShadow: "0 2px 10px rgba(0,0,0,.2)",
       }}
     >
-      <Link to="/">Home</Link>
+      <Link
+        to="/"
+        style={{
+          color: "white",
+          textDecoration: "none",
+          fontSize: "28px",
+          fontWeight: "bold",
+        }}
+      >
+        CodeArena
+      </Link>
 
-      {!token && (
-        <>
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
-        </>
-      )}
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          alignItems: "center",
+        }}
+      >
+        <Link style={linkStyle} to="/">
+          Home
+        </Link>
 
-      {token && user?.role === "candidate" && (
-        <>
-          <Link to="/my-applications">
-            My Applications
-          </Link>
-        </>
-      )}
+        {token && user?.role === "candidate" && (
+          <>
+            <Link style={linkStyle} to="/my-applications">
+              My Applications
+            </Link>
 
-      {token && user?.role === "recruiter" && (
-        <>
-          <Link to="/recruiter">
-            Recruiter Dashboard
-          </Link>
-        </>
-      )}
+            <Link style={linkStyle} to="/profile">
+              Profile
+            </Link>
+          </>
+        )}
 
-      {token && (
-        <button onClick={logout}>
-          Logout
-        </button>
-      )}
-    </div>
+        {token && user?.role === "recruiter" && (
+          <>
+            <Link style={linkStyle} to="/recruiter">
+              Dashboard
+            </Link>
+
+            <Link style={linkStyle} to="/create-job">
+              Create Job
+            </Link>
+          </>
+        )}
+
+        {!token && (
+          <>
+            <Link style={linkStyle} to="/login">
+              Login
+            </Link>
+
+            <Link style={linkStyle} to="/register">
+              Register
+            </Link>
+          </>
+        )}
+
+        {token && (
+          <button
+            onClick={logout}
+            style={{
+              background: "#ef4444",
+              color: "white",
+              border: "none",
+              padding: "8px 18px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    </nav>
   );
 }
+
+const linkStyle = {
+  color: "white",
+  textDecoration: "none",
+  fontWeight: "500",
+};

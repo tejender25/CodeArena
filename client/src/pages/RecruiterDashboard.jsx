@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getMyJobs, deleteJob } from "../services/jobService";
+import {
+  getMyJobs,
+  deleteJob,
+} from "../services/jobService";
 
 export default function RecruiterDashboard() {
   const [jobs, setJobs] = useState([]);
@@ -19,73 +22,184 @@ export default function RecruiterDashboard() {
   };
 
   const handleDelete = async (id) => {
-  try {
-    await deleteJob(id);
+    try {
+      await deleteJob(id);
 
-    alert("Job Deleted Successfully");
+      alert("Job Deleted Successfully");
 
-    loadJobs();
-  } catch (err) {
-    alert(err.response?.data?.message || "Delete Failed");
-  }
-};
+      loadJobs();
+    } catch (err) {
+      alert(err.response?.data?.message || "Delete Failed");
+    }
+  };
+
   return (
-    <div style={{ padding: 40 }}>
-      <h1>Recruiter Dashboard</h1>
+    <div
+      style={{
+        background: "#f5f7fb",
+        minHeight: "100vh",
+        padding: "40px",
+      }}
+    >
+      {/* Header */}
 
-      <Link to="/create-job">
-        <button>Create New Job</button>
-      </Link>
-
-      <br />
-      <br />
-
-      {jobs.length === 0 ? (
-        <h3>No Jobs Posted Yet</h3>
-      ) : (
-        jobs.map((job) => (
-          <div
-            key={job._id}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "40px",
+        }}
+      >
+        <div>
+          <h1
             style={{
-              border: "1px solid gray",
-              padding: 20,
-              marginBottom: 20,
-              borderRadius: 8,
+              color: "#1e3a8a",
+              marginBottom: "5px",
             }}
           >
-            <h2>{job.title}</h2>
+            Recruiter Dashboard
+          </h1>
 
-            <p>
-              <strong>Company:</strong> {job.company}
-            </p>
+          <p style={{ color: "#666" }}>
+            Manage all your job postings.
+          </p>
+        </div>
 
-            <p>
-              <strong>Location:</strong> {job.location}
-            </p>
+        <Link to="/create-job">
+          <button
+            style={{
+              background: "#2563eb",
+              color: "white",
+              border: "none",
+              padding: "12px 20px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          >
+            + Create Job
+          </button>
+        </Link>
+      </div>
 
+      {jobs.length === 0 ? (
+        <div
+          style={{
+            background: "white",
+            padding: "40px",
+            borderRadius: "12px",
+            textAlign: "center",
+            boxShadow: "0 5px 15px rgba(0,0,0,.08)",
+          }}
+        >
+          <h2>No Jobs Posted Yet</h2>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit,minmax(380px,1fr))",
+            gap: "25px",
+          }}
+        >
+          {jobs.map((job) => (
             <div
+              key={job._id}
               style={{
-                display: "flex",
-                gap: "10px",
-                marginTop: "15px",
+                background: "white",
+                padding: "25px",
+                borderRadius: "12px",
+                boxShadow:
+                  "0 5px 15px rgba(0,0,0,.08)",
               }}
             >
-              <Link to={`/applicants/${job._id}`}>
-                <button>Applicants</button>
-              </Link>
-
-              <Link to={`/edit-job/${job._id}`}>
-                <button>Edit</button>
-              </Link>
-
-              <button
-                onClick={() => handleDelete(job._id)}
+              <h2
+                style={{
+                  color: "#1e3a8a",
+                  marginBottom: "15px",
+                }}
               >
-                Delete
-              </button>
+                {job.title}
+              </h2>
+
+              <p>
+                <strong>🏢 Company:</strong>{" "}
+                {job.company}
+              </p>
+
+              <p>
+                <strong>📍 Location:</strong>{" "}
+                {job.location}
+              </p>
+
+              <p>
+                <strong>💰 Salary:</strong> ₹
+                {job.salary}
+              </p>
+
+              <p>
+                <strong>🧠 Experience:</strong>{" "}
+                {job.experience}
+              </p>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  marginTop: "20px",
+                }}
+              >
+                <Link to={`/applicants/${job._id}`}>
+                  <button
+                    style={{
+                      background: "#2563eb",
+                      color: "white",
+                      border: "none",
+                      padding: "10px 16px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Applicants
+                  </button>
+                </Link>
+
+                <Link to={`/edit-job/${job._id}`}>
+                  <button
+                    style={{
+                      background: "#f59e0b",
+                      color: "white",
+                      border: "none",
+                      padding: "10px 16px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Edit
+                  </button>
+                </Link>
+
+                <button
+                  onClick={() =>
+                    handleDelete(job._id)
+                  }
+                  style={{
+                    background: "#ef4444",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

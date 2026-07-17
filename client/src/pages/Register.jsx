@@ -26,67 +26,127 @@ export default function Register() {
       const res = await registerUser(form);
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
 
       alert("Registration Successful");
 
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Registration Failed");
+      alert(
+        err.response?.data?.message ||
+          "Registration Failed"
+      );
     }
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>Register</h2>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f5f7fb",
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          width: "400px",
+          background: "white",
+          padding: "40px",
+          borderRadius: "12px",
+          boxShadow: "0 5px 20px rgba(0,0,0,.12)",
+        }}
+      >
+        <h1
+          style={{
+            textAlign: "center",
+            color: "#1e3a8a",
+            marginBottom: "30px",
+          }}
+        >
+          Create Account
+        </h1>
 
-      <form onSubmit={handleSubmit}>
         <input
-          placeholder="Full Name"
+          type="text"
           name="fullName"
+          placeholder="Full Name"
+          value={form.fullName}
           onChange={handleChange}
+          style={inputStyle}
         />
-
-        <br />
-        <br />
 
         <input
-          placeholder="Email"
+          type="email"
           name="email"
+          placeholder="Email"
+          value={form.email}
           onChange={handleChange}
+          style={inputStyle}
         />
-
-        <br />
-        <br />
 
         <input
           type="password"
-          placeholder="Password"
           name="password"
+          placeholder="Password"
+          value={form.password}
           onChange={handleChange}
+          style={inputStyle}
         />
-
-        <br />
-        <br />
 
         <select
           name="role"
+          value={form.role}
           onChange={handleChange}
+          style={inputStyle}
         >
           <option value="candidate">Candidate</option>
           <option value="recruiter">Recruiter</option>
         </select>
 
-        <br />
-        <br />
+        <button
+          style={{
+            width: "100%",
+            padding: "12px",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            fontSize: "16px",
+            cursor: "pointer",
+            marginTop: "10px",
+          }}
+        >
+          Register
+        </button>
 
-        <button>Register</button>
+        <p
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+          }}
+        >
+          Already have an account?{" "}
+          <Link to="/login">
+            Login
+          </Link>
+        </p>
       </form>
-
-      <br />
-
-      <Link to="/login">
-        Already have an account?
-      </Link>
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  marginBottom: "15px",
+  borderRadius: "8px",
+  border: "1px solid #ccc",
+  fontSize: "15px",
+  boxSizing: "border-box",
+};

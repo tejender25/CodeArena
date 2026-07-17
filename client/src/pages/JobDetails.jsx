@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getJobById } from "../services/jobService";
-import { Link } from "react-router-dom";
-import { applyJob } from "../services/applicationService";
 
 export default function JobDetails() {
   const { id } = useParams();
@@ -12,20 +10,6 @@ export default function JobDetails() {
   useEffect(() => {
     loadJob();
   }, []);
-
-  const handleApply = async () => {
-    try {
-
-        await applyJob(id);
-
-        alert("Applied Successfully");
-
-    } catch(err){
-
-        alert(err.response?.data?.message);
-
-    }
-};
 
   const loadJob = async () => {
     try {
@@ -37,46 +21,133 @@ export default function JobDetails() {
   };
 
   if (!job) {
-    return <h2>Loading...</h2>;
+    return (
+      <h2 style={{ textAlign: "center", marginTop: "80px" }}>
+        Loading...
+      </h2>
+    );
   }
 
   return (
-    <div style={{ padding: 40 }}>
-      <h1>{job.title}</h1>
+    <div
+      style={{
+        background: "#f5f7fb",
+        minHeight: "100vh",
+        padding: "40px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        style={{
+          width: "850px",
+          background: "white",
+          padding: "35px",
+          borderRadius: "12px",
+          boxShadow: "0 5px 20px rgba(0,0,0,.1)",
+        }}
+      >
+        <h1
+          style={{
+            color: "#1e3a8a",
+            marginBottom: "10px",
+          }}
+        >
+          {job.title}
+        </h1>
 
-      <h2>{job.company}</h2>
+        <h2
+          style={{
+            color: "#444",
+            marginBottom: "25px",
+          }}
+        >
+          🏢 {job.company}
+        </h2>
 
-      <p>
-        <b>Location:</b> {job.location}
-      </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "15px",
+            marginBottom: "30px",
+          }}
+        >
+          <p>
+            <strong>📍 Location:</strong> {job.location}
+          </p>
 
-      <p>
-        <b>Salary:</b> ₹{job.salary}
-      </p>
+          <p>
+            <strong>💰 Salary:</strong> ₹{job.salary}
+          </p>
 
-      <button onClick={handleApply}> Apply Now </button>
+          <p>
+            <strong>🧠 Experience:</strong> {job.experience}
+          </p>
 
-      <p>
-        <b>Experience:</b> {job.experience}
-      </p>
+          <p>
+            <strong>💼 Job Type:</strong> {job.jobType}
+          </p>
+        </div>
 
-      <p>
-        <b>Description:</b>
-      </p>
+        <h3>Description</h3>
 
-      <p>{job.description}</p>
+        <p
+          style={{
+            lineHeight: "1.8",
+            color: "#555",
+          }}
+        >
+          {job.description}
+        </p>
 
-      <h3>Skills</h3>
+        <h3 style={{ marginTop: "30px" }}>
+          Required Skills
+        </h3>
 
-      <ul>
-        {job.skills.map((skill) => (
-          <li key={skill}>{skill}</li>
-        ))}
-      </ul>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            marginTop: "15px",
+          }}
+        >
+          {job.skills.map((skill) => (
+            <span
+              key={skill}
+              style={{
+                background: "#dbeafe",
+                color: "#1e3a8a",
+                padding: "8px 15px",
+                borderRadius: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
 
-      <Link to={`/apply/${job._id}`}>
-    <button>Apply Now</button>
-</Link>
+        <Link to={`/apply/${job._id}`}>
+          <button
+            style={{
+              marginTop: "35px",
+              width: "100%",
+              padding: "15px",
+              background: "#2563eb",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "17px",
+              fontWeight: "bold",
+            }}
+          >
+            Apply Now
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

@@ -29,7 +29,7 @@ export default function CreateJob() {
         skills: form.skills.split(","),
       });
 
-      alert("Job Created");
+      alert("Job Created Successfully!");
 
       setForm({
         title: "",
@@ -47,75 +47,140 @@ export default function CreateJob() {
   };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Create Job</h2>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f5f7fb",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "40px",
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          width: "650px",
+          background: "#fff",
+          padding: "35px",
+          borderRadius: "12px",
+          boxShadow: "0 5px 20px rgba(0,0,0,.12)",
+        }}
+      >
+        <h1
+          style={{
+            textAlign: "center",
+            color: "#1e3a8a",
+            marginBottom: "30px",
+          }}
+        >
+          Create New Job
+        </h1>
 
-      <form onSubmit={handleSubmit}>
+        <label>Job Title</label>
         <input
           name="title"
-          placeholder="Title"
           value={form.title}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br /><br />
-
+        <label>Company</label>
         <input
           name="company"
-          placeholder="Company"
           value={form.company}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br /><br />
-
+        <label>Location</label>
         <input
           name="location"
-          placeholder="Location"
           value={form.location}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br /><br />
-
+        <label>Description</label>
         <textarea
           name="description"
-          placeholder="Description"
           value={form.description}
           onChange={handleChange}
+          rows="5"
+          style={textareaStyle}
         />
 
-        <br /><br />
-
+        <label>Salary</label>
         <input
           name="salary"
-          placeholder="Salary"
           value={form.salary}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br /><br />
-
+        <label>Experience</label>
         <input
           name="experience"
-          placeholder="Experience"
           value={form.experience}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br /><br />
+        <label>Job Type</label>
+        <select
+          name="jobType"
+          value={form.jobType}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option>Full-Time</option>
+          <option>Part-Time</option>
+          <option>Internship</option>
+          <option>Remote</option>
+        </select>
 
+        <label>Skills (comma separated)</label>
         <input
           name="skills"
-          placeholder="React,Node,MongoDB"
+          placeholder="React, Node.js, MongoDB"
           value={form.skills}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br /><br />
-
-        <button>Create Job</button>
+        <button
+          style={{
+            width: "100%",
+            marginTop: "20px",
+            padding: "14px",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          Create Job
+        </button>
       </form>
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  marginTop: "8px",
+  marginBottom: "18px",
+  borderRadius: "8px",
+  border: "1px solid #ccc",
+  fontSize: "15px",
+  boxSizing: "border-box",
+};
+
+const textareaStyle = {
+  ...inputStyle,
+  resize: "vertical",
+};

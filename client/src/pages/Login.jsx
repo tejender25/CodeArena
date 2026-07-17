@@ -15,7 +15,7 @@ export default function Login() {
       ...form,
       [e.target.name]: e.target.value,
     });
-  };    
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,59 +24,108 @@ export default function Login() {
       const res = await loginUser(form);
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
 
-      localStorage.setItem("user",JSON.stringify(res.data.user));
+      alert("Login Successful");
 
-      const role = res.data.user.role;
-
-alert("Login Successful");
-
-if (role === "recruiter") {
-  navigate("/recruiter");
-} else {
-  navigate("/");
-}
+      if (res.data.user.role === "recruiter") {
+        navigate("/recruiter");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
-  console.log("ERROR:", err);
-  console.log("RESPONSE:", err.response);
-  console.log("DATA:", err.response?.data);
-
-  alert(err.response?.data?.message || err.message);
-}
+      alert(err.response?.data?.message || err.message);
+    }
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>Login</h2>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f5f7fb",
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          width: "380px",
+          background: "white",
+          padding: "40px",
+          borderRadius: "12px",
+          boxShadow: "0 5px 20px rgba(0,0,0,.12)",
+        }}
+      >
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "30px",
+            color: "#1e3a8a",
+          }}
+        >
+          Login
+        </h1>
 
-      <form onSubmit={handleSubmit}>
         <input
-          placeholder="Email"
           name="email"
+          placeholder="Email"
+          value={form.email}
           onChange={handleChange}
+          style={inputStyle}
         />
-
-        <br />
-        <br />
 
         <input
           type="password"
-          placeholder="Password"
           name="password"
+          placeholder="Password"
+          value={form.password}
           onChange={handleChange}
+          style={inputStyle}
         />
 
-        <br />
-        <br />
+        <button
+          style={{
+            width: "100%",
+            padding: "12px",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            fontSize: "16px",
+            cursor: "pointer",
+            marginTop: "10px",
+          }}
+        >
+          Login
+        </button>
 
-        <button>Login</button>
+        <p
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+          }}
+        >
+          Don't have an account?{" "}
+          <Link to="/register">
+            Register
+          </Link>
+        </p>
       </form>
-
-      <br />
-
-      <Link to="/register">
-        Create Account
-      </Link>
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  marginBottom: "15px",
+  borderRadius: "8px",
+  border: "1px solid #ccc",
+  fontSize: "15px",
+  boxSizing: "border-box",
+};
