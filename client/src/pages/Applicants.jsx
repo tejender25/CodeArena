@@ -37,37 +37,50 @@ export default function Applicants() {
       <h1>Applicants</h1>
 
       {applications.map((app) => (
-        <div
-          key={app._id}
-          style={{
-            border: "1px solid gray",
-            padding: "15px",
-            marginBottom: "20px",
-          }}
-        >
-          <h2>{app.applicant.fullName}</h2>
+  <div
+    key={app._id}
+    style={{
+      border: "1px solid gray",
+      padding: "15px",
+      marginBottom: "20px",
+    }}
+  >
+    <h2>{app.applicant.fullName}</h2>
 
-          <p>{app.applicant.email}</p>
+    <p>{app.applicant.email}</p>
 
-          <p>Status : {app.status}</p>
+    <p>Status : {app.status}</p>
 
-          <button
-            onClick={() =>
-              changeStatus(app._id, "Accepted")
-            }
-          >
-            Accept
-          </button>
+    {/* Resume Button */}
+    {app.resume && (
+      <a
+        href={app.resume}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <button>View Resume</button>
+      </a>
+    )}
 
-          <button
-            onClick={() =>
-              changeStatus(app._id, "Rejected")
-            }
-          >
-            Reject
-          </button>
-        </div>
-      ))}
+    <br />
+    <br />
+
+    <button
+      onClick={() => changeStatus(app._id, "Accepted")}
+    >
+      Accept
+    </button>
+
+    {" "}
+
+    <button
+      onClick={() => changeStatus(app._id, "Rejected")}
+    >
+      Reject
+    </button>
+
+  </div>
+))}
     </div>
   );
 }

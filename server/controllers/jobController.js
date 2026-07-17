@@ -230,6 +230,9 @@ const getMyJobs = async (req, res) => {
     });
   }
 };
+
+
+
 module.exports = {
-  createJob,getAllJobs,getJobById,updateJob,deleteJob,getMyJobs
+  createJob,getAllJobs,getJobById,deleteJob,getMyJobs,updateJob
 };

@@ -12,6 +12,8 @@ import MyApplications from "./pages/MyApplications";
 import Applicants from "./pages/Applicants";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import EditJob from "./pages/EditJob";
+import Profile from "./pages/Profile";
 export default function App() {
   return (
 
@@ -42,7 +44,7 @@ export default function App() {
           </ProtectedRoute>
         }
       />
-
+      
       {/* Recruiter Protected */}
       <Route
         path="/recruiter"
@@ -70,9 +72,20 @@ export default function App() {
           </ProtectedRoute>
         }
       />
-
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+/>
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
+
+      <Route path="/edit-job/:id" element={<ProtectedRoute recruiterOnly={true}><EditJob/></ProtectedRoute>
+  }
+/>
     </Routes>
     </>
   );

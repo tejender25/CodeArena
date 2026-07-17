@@ -1,19 +1,36 @@
-const profile = async (req, res) => {
+const User = require("../models/User");
 
-    res.json({
+const getProfile = async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
 
-        success: true,
+  res.json({
+    success: true,
+    user,
+  });
+};
 
-        message: "Protected Route",
+const updateProfile = async (req, res) => {
+  const user = await User.findById(req.user.id);
 
-        user: req.user
-
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
     });
+  }
 
+  user.fullName = req.body.fullName || user.fullName;
+  user.skills = req.body.skills || user.skills;
+
+  await user.save();
+
+  res.json({
+    success: true,
+    user,
+  });
 };
 
 module.exports = {
-
-    profile
-
+  getProfile,
+  updateProfile,
 };

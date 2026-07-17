@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getMyJobs } from "../services/jobService";
-import { deleteJob } from "../services/jobService";
+import { getMyJobs, deleteJob } from "../services/jobService";
 
 export default function RecruiterDashboard() {
   const [jobs, setJobs] = useState([]);
@@ -11,26 +10,15 @@ export default function RecruiterDashboard() {
   }, []);
 
   const loadJobs = async () => {
-  try {
-    const res = await getMyJobs();
+    try {
+      const res = await getMyJobs();
+      setJobs(res.data.jobs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    console.log("API Response:", res.data);
-
-    setJobs(res.data.jobs);
-
-    console.log("Jobs:", res.data.jobs);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-   const handleDelete = async (id) => {
-  const confirmDelete = window.confirm(
-    "Are you sure you want to delete this job?"
-  );
-
-  if (!confirmDelete) return;
-
+  const handleDelete = async (id) => {
   try {
     await deleteJob(id);
 
@@ -41,8 +29,6 @@ export default function RecruiterDashboard() {
     alert(err.response?.data?.message || "Delete Failed");
   }
 };
-
-
   return (
     <div style={{ padding: 40 }}>
       <h1>Recruiter Dashboard</h1>
@@ -54,56 +40,53 @@ export default function RecruiterDashboard() {
       <br />
       <br />
 
-      {jobs.map((job) => (
-  <div
-    key={job._id}
-    style={{
-      border: "1px solid gray",
-      padding: 20,
-      marginBottom: 20,
-    }}
-  >
-    <h2>{job.title}</h2>
+      {jobs.length === 0 ? (
+        <h3>No Jobs Posted Yet</h3>
+      ) : (
+        jobs.map((job) => (
+          <div
+            key={job._id}
+            style={{
+              border: "1px solid gray",
+              padding: 20,
+              marginBottom: 20,
+              borderRadius: 8,
+            }}
+          >
+            <h2>{job.title}</h2>
 
-    <p>{job.company}</p>
+            <p>
+              <strong>Company:</strong> {job.company}
+            </p>
 
-    <p>{job.location}</p>
+            <p>
+              <strong>Location:</strong> {job.location}
+            </p>
 
-    <div
-  style={{
-    display: "flex",
-    gap: "10px",
-    marginTop: "10px",
-  }}
->
-  <Link to={`/applicants/${job._id}`}>
-    <button>Applicants</button>
-  </Link>
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                marginTop: "15px",
+              }}
+            >
+              <Link to={`/applicants/${job._id}`}>
+                <button>Applicants</button>
+              </Link>
 
-  <Link to={`/edit-job/${job._id}`}>
-    <button>Edit</button>
-  </Link>
+              <Link to={`/edit-job/${job._id}`}>
+                <button>Edit</button>
+              </Link>
 
-  <button
-    onClick={() => handleDelete(job._id)}
-  >
-    Delete
-  </button>
-</div>
-
-    {" "}
-
-    <Link to={`/edit-job/${job._id}`}>
-      <button>Edit</button>
-    </Link>
-
-    {" "}
-
-    <button onClick={() => handleDelete(job._id)}>
-      Delete
-    </button>
-  </div>
-))}
+              <button
+                onClick={() => handleDelete(job._id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 }

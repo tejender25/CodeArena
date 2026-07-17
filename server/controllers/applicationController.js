@@ -38,7 +38,7 @@ if (req.file) {
         const uploadStream = cloudinary.uploader.upload_stream(
             {
                 folder: "resumes",
-                resource_type: "auto",
+                resource_type: "raw",
             },
             (error, result) => {
 
