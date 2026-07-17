@@ -10,6 +10,6 @@ export const getApplicants = (jobId) =>
   api.get(`/applications/job/${jobId}`);
 
 export const updateStatus = (applicationId, status) =>
-  api.put(`/applications/${applicationId}`, {
+  api.patch(`/applications/status/${applicationId}`, {
     status,
   });
