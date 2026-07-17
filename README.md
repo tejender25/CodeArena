@@ -180,15 +180,6 @@ API_SECRET=your_cloudinary_api_secret
 
 ---
 
-## Deployment
-
-**Frontend:**  
-https://code-arena-feycnihjf-tejender26.vercel.app
-
-**Backend:**  
-https://codearena-0vq3.onrender.com
----
-
 ## Future Improvements
 
 - Email Notifications
